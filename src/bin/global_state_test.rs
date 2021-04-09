@@ -490,8 +490,12 @@ fn export_circuit_and_testdata(
     blocks: Vec<common::L2Block>,
     source: circuit_test::types::CircuitSource,
 ) -> Result<PathBuf> {
+    // TODO: separate these
+
     let test_dir = circuit_repo.join("testdata");
     let circuit_dir = write_circuit(circuit_repo, &test_dir, &source)?;
+
+    let db_url = "postgres://coordinator:coordinator_AA9944@127.0.0.1/prover_cluster";
 
     for (blki, blk) in blocks.into_iter().enumerate() {
         let dir = circuit_dir.join(format!("{:04}", blki));
