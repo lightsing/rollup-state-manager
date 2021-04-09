@@ -507,7 +507,10 @@ fn export_circuit_and_testdata(
         .expect("build runtime");
     main_runtime
         .block_on(async {
-            let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
+            let /*mut*/ db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
+            for (_, blk) in blocks.clone().into_iter().enumerate() {
+                println!("{}",  serde_json::ser::to_string_pretty(&types::L2BlockSerde::from(blk)).unwrap());
+            }
         })
         // .unwrap()
         ;
