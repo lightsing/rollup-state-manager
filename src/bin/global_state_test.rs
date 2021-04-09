@@ -487,6 +487,8 @@ fn write_input_output(dir: &Path, block: common::L2Block) -> Result<()> {
     Ok(())
 }
 
+// TODO: re-org repos
+
 fn export_circuit_and_testdata(
     circuit_repo: &Path,
     blocks: Vec<common::L2Block>,
