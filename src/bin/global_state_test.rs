@@ -507,7 +507,8 @@ fn export_circuit_and_testdata(
         .block_on(async {
             let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
         })
-        .unwrap();
+        // .unwrap()
+        ;
 
     for (blki, blk) in blocks.into_iter().enumerate() {
         let dir = circuit_dir.join(format!("{:04}", blki));
