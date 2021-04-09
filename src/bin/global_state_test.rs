@@ -2,7 +2,7 @@
 #![allow(clippy::upper_case_acronyms)]
 #![allow(clippy::large_enum_variant)]
 
-use sqlx;
+use sqlx::{self, Connection};
 
 use anyhow::{anyhow, Result};
 use rust_decimal::Decimal;
@@ -498,8 +498,9 @@ fn export_circuit_and_testdata(
     let circuit_dir = write_circuit(circuit_repo, &test_dir, &source)?;
 
     // TODO: use ENV for this
+    // TODO: we need to use async
     let db_url = "postgres://coordinator:coordinator_AA9944@127.0.0.1/prover_cluster";
-    let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await?;
+    let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
 
     for (blki, blk) in blocks.into_iter().enumerate() {
         let dir = circuit_dir.join(format!("{:04}", blki));
