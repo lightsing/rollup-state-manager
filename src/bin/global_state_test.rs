@@ -498,9 +498,16 @@ fn export_circuit_and_testdata(
     let circuit_dir = write_circuit(circuit_repo, &test_dir, &source)?;
 
     // TODO: use ENV for this
-    // TODO: we need to use async
     let db_url = "postgres://coordinator:coordinator_AA9944@127.0.0.1/prover_cluster";
-    let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
+    let main_runtime = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .expect("build runtime");
+    main_runtime
+        .block_on(async {
+            let mut db_conn = sqlx::postgres::PgConnection::connect(&db_url).await;
+        })
+        .unwrap();
 
     for (blki, blk) in blocks.into_iter().enumerate() {
         let dir = circuit_dir.join(format!("{:04}", blki));
