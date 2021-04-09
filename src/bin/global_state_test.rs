@@ -64,7 +64,6 @@ impl AsMut<PlaceOrderType> for PlaceOrder {
 }
 
 mod test_const {
-
     pub const NTXS: usize = 2;
     pub const BALANCELEVELS: usize = 2;
     pub const ORDERLEVELS: usize = 7;
@@ -206,6 +205,7 @@ impl<'c> From<OrderState<'c>> for common::Order {
         }
     }
 }
+
 impl<'c> std::cmp::PartialOrd for OrderState<'c> {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))

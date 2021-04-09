@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 
 /*
  * cargo run --bin export_circuit_test
- * npm -g install https://github.com/Fluidex/snarkit
+ * npm -g install snarkit
  * npx snarkit test ../circuits/testdata/CheckLeafUpdate_2/
  */
 
@@ -31,12 +31,14 @@ fn write_test_case(circuit_repo: &Path, test_dir: &Path, t: circuit_test::types:
     serde_json::to_writer_pretty(output_f, &t.data.output)?;
     Ok(())
 }
+
 fn test_all() -> anyhow::Result<()> {
     let circuit_repo = fs::canonicalize(PathBuf::from("../circuits")).expect("invalid circuits repo path");
     let test_dir = circuit_repo.join("testdata");
     write_test_case(&circuit_repo, &test_dir, circuit_test::binary_merkle_tree::test_check_leaf_update())?;
     Ok(())
 }
+
 fn main() {
     match test_all() {
         Ok(_) => {}
