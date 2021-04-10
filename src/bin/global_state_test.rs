@@ -511,14 +511,14 @@ fn export_circuit_and_testdata(
             for (blki, blk) in blocks.clone().into_iter().enumerate() {
                 println!("\n{}\n",  serde_json::ser::to_string_pretty(&types::L2BlockSerde::from(blk.clone())).unwrap());
                 let stmt = format!(
-                    "insert into {} (task_id, circuit, input) values ($1, $2, $3)",
+                    "insert into {} (task_id, circuit, input) values ($1, $2, jsonb($3))",
                     // models::tablenames::TASK
                     "task"
                 );
                 sqlx::query(&stmt)
                 .bind(blki.to_string())
                 .bind("block")
-                .bind(serde_json::ser::to_string_pretty(&types::L2BlockSerde::from(blk)).unwrap())
+                .bind(serde_json::ser::to_string(&types::L2BlockSerde::from(blk)).unwrap())
                 .execute(&mut db_conn)
                 .await.unwrap();
             }
